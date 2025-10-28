@@ -14,7 +14,7 @@ class PostResource extends JsonResource
             'titulo' => $this->titulo_post,
             'texto' => $this->texto_post,
             'midia_url' => $this->midia_post ? url('storage/' . $this->midia_post) : null,
-            'data_publicacao' => $this->created_at->format('d/m/Y'),
+            'data_publicacao' => $this->created_at->toISOString(),
             'postador' => $this->whenLoaded('postador', function () {
                 return [
                     'nome' => $this->postador->nome_postador,
