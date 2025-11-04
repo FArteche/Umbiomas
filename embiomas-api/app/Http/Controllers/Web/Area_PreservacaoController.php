@@ -130,10 +130,14 @@ class Area_PreservacaoController extends Controller
 
     public function updateMap(Request $request, Area_Preservacao $area_preservacao)
     {
-        $request->validate(['area_geografica' => 'nullable|json']);
+        $validated = $request->validate(['area_geografica' => 'nullable|json']);
+
+        $areaGeograficaArray = $validated['area_geografica']
+            ? json_decode($validated['area_geografica'], true)
+            : null;
 
         $area_preservacao->update([
-            'area_geografica' => $request->input('area_geografica')
+            'area_geografica' => $areaGeograficaArray
         ]);
 
         return redirect()->route('areas-preservacao.editMap', $area_preservacao)->with('success', 'Mapa atualizado com sucesso!');

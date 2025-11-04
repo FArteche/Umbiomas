@@ -26,7 +26,7 @@ class PublicContentController extends Controller
 {
     public function areasPreservacao(Request $request, Bioma $bioma)
     {
-        $query = $bioma->areasPreservacao()->with('tipoap');
+        $query = $bioma->area_preservacao()->with('tipoap');
         if ($request->has('search')) {
             $query->where('nome_ap', 'like', '%' . $request->search . '%');
         }
@@ -65,6 +65,7 @@ class PublicContentController extends Controller
 
     public function showClima(Clima $clima)
     {
+        $clima->load('biomas');
         return new ClimaResource($clima);
     }
 
@@ -79,6 +80,7 @@ class PublicContentController extends Controller
 
     public function showFauna(Fauna $fauna)
     {
+        $fauna->load('biomas');
         return new FaunaResource($fauna);
     }
     public function flora(Request $request, Bioma $bioma)
@@ -92,6 +94,7 @@ class PublicContentController extends Controller
 
     public function showFlora(Flora $flora)
     {
+        $flora->load('biomas');
         return new FloraResource($flora);
     }
 

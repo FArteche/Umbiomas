@@ -21,6 +21,9 @@ class FloraResource extends JsonResource
             'familia' => $this->familia_flora,
             'descricao' => $this->descricao_flora,
             'imagem_url' => $this->imagem_flora ? url('storage/' . $this->imagem_flora) : null,
+            'tambem_presente_em' => $this->whenLoaded('biomas', function () {
+                return $this->biomas->pluck('nome_bioma');
+            }),
         ];
     }
 }

@@ -28,10 +28,10 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: json['id'],
-      titulo: json['titulo'],
-      texto: json['texto'],
-      midiaUrl: json['midia_url'],
+      id: json['id'] as int? ?? 0,
+      titulo: json['titulo'] as String? ?? 'Titulo indisponível',
+      texto: json['texto'] as String? ?? 'Texto indisponível',
+      midiaUrl: json['midia_url'] as String?,
       dataPublicacao: DateTime.parse(json['data_publicacao']),
       postador: json['postador'] != null
           ? Postador.fromJson(json['postador'])

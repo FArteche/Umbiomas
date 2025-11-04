@@ -16,6 +16,9 @@ class FaunaResource extends JsonResource
             'familia' => $this->familia_fauna,
             'descricao' => $this->descricao_fauna,
             'imagem_url' => $this->imagem_fauna ? url('storage/' . $this->imagem_fauna) : null,
+            'tambem_presente_em' => $this->whenLoaded('biomas', function () {
+                return $this->biomas->pluck('nome_bioma');
+            }),
         ];
     }
 }

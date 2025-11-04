@@ -22,6 +22,10 @@ class Area_Preservacao extends Model
         'area_geografica'
     ];
 
+    protected $casts = [
+        'area_geografica' => 'array',
+    ];
+
     public function bioma()
     {
         return $this->belongsTo(Bioma::class, 'bioma_id', 'id_bioma');

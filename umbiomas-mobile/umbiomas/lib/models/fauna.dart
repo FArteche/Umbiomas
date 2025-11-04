@@ -5,6 +5,7 @@ class Fauna {
   final String? familia;
   final String? descricao;
   final String? imagemUrl;
+  final List<String>? tambemPresenteEm;
 
   Fauna({
     required this.id,
@@ -13,16 +14,24 @@ class Fauna {
     this.familia,
     this.descricao,
     this.imagemUrl,
+    this.tambemPresenteEm,
   });
 
-  factory Fauna.fromJson(Map<String, dynamic> json){
+  factory Fauna.fromJson(Map<String, dynamic> json) {
+    List<String>? outrosBiomas;
+    if (json['tambem_presente_em'] != null &&
+        json['tambem_presente_em'] is List) {
+      outrosBiomas = List<String>.from(json['tambem_presente_em']);
+    }
+
     return Fauna(
       id: json['id'],
       nome: json['nome'],
       nomeCientifico: json['nome_cientifico'],
       familia: json['familia'],
       descricao: json['descricao'],
-      imagemUrl: json['imagem_url']
+      imagemUrl: json['imagem_url'],
+      tambemPresenteEm: outrosBiomas
     );
   }
 }

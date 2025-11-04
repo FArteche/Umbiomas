@@ -19,6 +19,9 @@ class ClimaResource extends JsonResource
             'nome' => $this->nome_clima,
             'descricao' => $this->descricao_clima,
             'imagem_url' => $this->imagem_clima ? url('storage/' . $this->imagem_clima) : null,
+            'tambem_presente_em' => $this->whenLoaded('biomas', function () {
+                return $this->biomas->pluck('nome_bioma');
+            }),
         ];
     }
 }

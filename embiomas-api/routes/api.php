@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\BiomaController;
 use App\Http\Controllers\Api\V1\PublicContentController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\SugestaoController;
+use App\Http\Controllers\Api\V1\QuizController;
 
 Route::prefix('v1')->group(function () {
     // Rotas de Biomas
@@ -36,4 +37,9 @@ Route::prefix('v1')->group(function () {
     // Rotas de Criação
     Route::post('posts', [PostController::class, 'store']);
     Route::post('sugestoes', [SugestaoController::class, 'store']);
+
+    //Rotas do quiz
+    Route::get('biomas/{bioma}/quiz', [QuizController::class, 'generateQuiz']);
+    Route::post('quiz/submit', [QuizController::class, 'submitScore']);
+    Route::get('biomas/{bioma}/ranking', [QuizController::class, 'getRanking']);
 });

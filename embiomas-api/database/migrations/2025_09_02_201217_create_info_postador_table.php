@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('info_postador', function (Blueprint $table) {
             $table->id('id_postador');
             $table->string('nome_postador', 100);
-            $table->string('email_postador', 150);
-            $table->string('telefone_postador', 30);
-            $table->string('instituicao_postador', 150);
-            $table->string('ocupacao_postador', 100);
+            $table->string('email_postador', 150)->nullable();
+            $table->string('telefone_postador', 30)->nullable();
+            $table->string('instituicao_postador', 150)->nullable();
+            $table->string('ocupacao_postador', 100)->nullable();
             $table->timestamps();
         });
     }

@@ -15,11 +15,11 @@ class Hidrografia {
 
   factory Hidrografia.fromJson(Map<String, dynamic> json) {
     return Hidrografia(
-      id: json['id'],
-      nome: json['nome'],
-      descricao: json['descricao'],
-      tipo: json['tipo'],
-      imagemUrl: json['imagem_url'],
+      id: json['id'] as int? ?? 0,
+      nome: json['nome'] as String? ?? 'Nome indisponível',
+      descricao: json['descricao'] as String?,
+      tipo: json['tipo'] as String?,
+      imagemUrl: json['imagem_url'] as String?,
     );
   }
 }
