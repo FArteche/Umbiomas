@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('hist_alteracao_bioma', function (Blueprint $table) {
             $table->id('id_hist');
-            //$table->foreignId('bioma_id')->constrained('biomas', 'id_bioma')->onDelete('cascade')->nullable();
             $table->foreignid('user_id')->constrained('users')->onDelete('cascade');
-
             $table->morphs('loggable');
-
+            $table->string('nome_objeto')->default('');
             $table->enum('tipo_alteracao', ['criacao', 'edicao', 'exclusao']);
             $table->text('detalhes_alteracao')->nullable();
             $table->timestamps();

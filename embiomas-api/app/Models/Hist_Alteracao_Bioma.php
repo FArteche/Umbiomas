@@ -14,9 +14,9 @@ class Hist_Alteracao_Bioma extends Model
     protected $primaryKey = 'id_hist';
     protected $fillable = [
         'user_id',
-        //'bioma_id',
         'loggable_id',
         'loggable_type',
+        'nome_objeto',
         'tipo_alteracao',
         'detalhes_alteracao'
     ];

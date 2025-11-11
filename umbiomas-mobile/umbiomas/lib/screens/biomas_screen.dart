@@ -1,8 +1,10 @@
+// lib/screens/biomas_screen.dart
 import 'package:flutter/material.dart';
 import 'package:umbiomas/models/bioma.dart';
 import 'package:umbiomas/navigation/fade_page_route.dart';
 import 'package:umbiomas/screens/biomas_detail_screen.dart';
 import 'package:umbiomas/services/api_service.dart';
+import 'package:umbiomas/theme/app_theme.dart'; // Importe o tema
 
 class BiomasScreen extends StatefulWidget {
   const BiomasScreen({super.key});
@@ -24,41 +26,28 @@ class _BiomasScreenState extends State<BiomasScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Biomas'), backgroundColor: Color.fromRGBO(46, 125, 50, 1)),
+      appBar: AppBar(title: Text('Biomas')),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors:  [Color.fromRGBO(46, 125, 50, 1), Colors.lightGreen[50]!],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [0.0, 0.7],
-          ),
-        ),
+        decoration: BoxDecoration(gradient: AppTheme.backgroundGradient), 
         child: FutureBuilder<List<Bioma>>(
           future: _biomasFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Erro ao carregar biomas: ${snapshot.error}\n\nVerifique sua conexão.',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              );
+              return Center(/* ... (erro) ... */);
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('Nenhum Biomas Encontrado.'));
+              return Center(child: Text('Nenhum Bioma Encontrado.'));
             } else {
               List<Bioma> biomas = snapshot.data!;
               return ListView.builder(
+                padding: EdgeInsets.all(10.0), 
                 itemCount: biomas.length,
                 itemBuilder: (context, index) {
                   final bioma = biomas[index];
                   return Card(
                     clipBehavior: Clip.antiAlias,
+                    elevation: 3.0, 
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
@@ -69,42 +58,35 @@ class _BiomasScreenState extends State<BiomasScreen> {
                         );
                       },
                       child: Container(
-                        height: 100,
+                        height: 120, 
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: bioma.imagemUrl != null
                                 ? NetworkImage(bioma.imagemUrl!)
-                                : AssetImage('assets/images/placeholder.png')
+                                : AssetImage('assets/images/logo_tr.png')
                                       as ImageProvider,
                             fit: BoxFit.cover,
                             colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.4),
+                              Colors.black.withOpacity(0.45), // Escurece um pouco mais
                               BlendMode.darken,
                             ),
                           ),
                         ),
-                        // Conteúdo que fica SOBRE a imagem de fundo
                         child: Align(
-                          // Alinha o texto no centro-esquerda (ou onde preferir)
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                            ),
-                            child: Text(
-                              bioma.nome,
-                              style: TextStyle(
-                                color: Colors.white, // Cor do texto
-                                fontSize: 20, // Tamanho do texto
-                                fontWeight: FontWeight.bold, // Peso da fonte
-                                shadows: [
-                                  Shadow(
-                                    blurRadius: 10.0,
-                                    color: Colors.black.withOpacity(0.5),
-                                    offset: Offset(2.0, 2.0),
-                                  ),
-                                ],
-                              ),
+                          alignment: Alignment.center, // Centraliza o texto
+                          child: Text(
+                            bioma.nome,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22, // Tamanho do texto
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.black.withOpacity(0.7),
+                                  offset: Offset(2.0, 2.0),
+                                ),
+                              ],
                             ),
                           ),
                         ),

@@ -1,11 +1,8 @@
 // lib/screens/main_menu_screen.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart'; // Usaremos Google Fonts para o título
+import 'package:umbiomas/screens/app_main_screen.dart';
 import 'package:umbiomas/widgets/nav_button.dart';
-import 'biomas_screen.dart';
-import 'posts_biomes_screen.dart';
-import 'create_suggestion_screen.dart';
-import 'quiz_selection_screen.dart';
 import '../navigation/fade_page_route.dart'; // Usando nossa animação de fade
 
 class MainMenuScreen extends StatelessWidget {
@@ -75,7 +72,7 @@ class MainMenuScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            FadePageRoute(child: BiomasScreen()),
+                            FadePageRoute(child: AppMainScreen(startingIndex: 0)),
                           );
                         },
                       ),
@@ -84,11 +81,11 @@ class MainMenuScreen extends StatelessWidget {
                         icon: Icons.chat_bubble_outline_rounded,
                         title: 'Posts',
                         subtitle: 'Veja as publicações',
-                        color: Color(0xFF3498db), 
+                        color: Colors.blue, 
                         onPressed: () {
                           Navigator.push(
                             context,
-                            FadePageRoute(child: PostsBiomesScreen()),
+                            FadePageRoute(child: AppMainScreen(startingIndex: 1)),
                           );
                         },
                       ),
@@ -97,11 +94,11 @@ class MainMenuScreen extends StatelessWidget {
                         icon: Icons.quiz_outlined,
                         title: 'Quiz',
                         subtitle: 'Teste seus conhecimentos',
-                        color: Color(0xFF9b59b6), 
+                        color: Colors.purple[700]!, 
                         onPressed: () {
                           Navigator.push(
                             context,
-                            FadePageRoute(child: QuizSelectionScreen()),
+                            FadePageRoute(child: AppMainScreen(startingIndex: 2)),
                           );
                         },
                       ),
@@ -110,11 +107,11 @@ class MainMenuScreen extends StatelessWidget {
                         icon: Icons.lightbulb_outline_rounded,
                         title: 'Enviar Sugestões',
                         subtitle: 'Contribua com o app',
-                        color: Color(0xFFf39c12), 
+                        color: Colors.orange[400]!, 
                         onPressed: () {
                           Navigator.push(
                             context,
-                            FadePageRoute(child: CreateSuggestionScreen()),
+                            FadePageRoute(child: AppMainScreen(startingIndex: 3)),
                           );
                         },
                       ),

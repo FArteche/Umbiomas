@@ -44,6 +44,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -74,7 +75,12 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
-
+# Configuração do Flutter Launcher Icons
+flutter_launcher_icons:
+  android: true  
+  image_path: "assets/icon/icon_b.png" 
+  adaptive_icon_background: "#2E7D32" 
+  adaptive_icon_foreground: "assets/icon/icon_b.png"
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

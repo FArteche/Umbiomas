@@ -7,10 +7,10 @@ class AppTheme {
 
   static final Color contentBoxBorderColor = Colors.green[900]!;
 
-  static const LinearGradient backgroundGradient = LinearGradient(
-    colors: [Color(0xFFF1F8E9), Colors.white],
+  static final LinearGradient backgroundGradient = LinearGradient(
+    colors: [Colors.green[100]!, Colors.lightGreen[50]!],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    stops: [0.0, 0.7],
+    stops: const [0.0, 0.7],
   );
 }

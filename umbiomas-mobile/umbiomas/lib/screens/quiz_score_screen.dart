@@ -1,9 +1,8 @@
-// lib/screens/quiz_score_screen.dart
 import 'package:flutter/material.dart';
 import 'package:umbiomas/models/info_postador.dart';
-import 'package:umbiomas/screens/quiz_ranking_screen.dart'; // Vamos criar esta
+import 'package:umbiomas/screens/quiz_ranking_screen.dart';
 import 'package:umbiomas/services/api_service.dart';
-import '../navigation/fade_page_route.dart'; // Importe a rota de animação
+import '../navigation/fade_page_route.dart';
 
 class QuizScoreScreen extends StatefulWidget {
   final int score;
@@ -40,7 +39,7 @@ class _QuizScoreScreenState extends State<QuizScoreScreen> {
 
   Future<void> _submitAndShowRanking() async {
     if (!_formKey.currentState!.validate()) {
-      return; 
+      return;
     }
 
     setState(() => _isLoading = true);
@@ -81,123 +80,142 @@ class _QuizScoreScreenState extends State<QuizScoreScreen> {
     }
   }
 
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      filled: true,
+      fillColor: Colors.purple[50]!.withOpacity(0.6),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        borderSide: BorderSide(color: Colors.purple[700]!, width: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Color quizPrimaryColor = Colors.purple[700]!;
+    final Color quizGradientStart = Colors.purple[300]!.withOpacity(0.5);
+    final Color quizGradientEnd = Colors.white;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Quiz Finalizado!'),
-        automaticallyImplyLeading: false, // Remove a seta de "voltar"
+        backgroundColor: quizPrimaryColor, // Cor tema
+        automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Exibição da Pontuação
-            Text(
-              'Sua Pontuação:',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            SizedBox(height: 16),
-            Text(
-              '${widget.score} / ${widget.totalQuestions}',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
+      body: Container(
+        // Aplicando o gradiente de fundo
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [quizGradientStart, quizGradientEnd],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.0, 0.7],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Sua Pontuação:',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
-            ),
-            SizedBox(height: 40),
-
-            // Formulário para o Ranking
-            Text(
-              'Entre para o Ranking Semanal!',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            SizedBox(height: 16),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _nomeController,
-                    decoration: InputDecoration(
-                      labelText: 'Seu Nome*',
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'Campo obrigatório'
-                        : null,
-                  ),
-                  SizedBox(height: 12),
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Seu Email*',
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return 'Campo obrigatório';
-                      final emailRegex = RegExp(
-                        r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-                      );
-                      if (!emailRegex.hasMatch(value)) return 'Email inválido';
-                      return null;
-                    },
-                  ),
-                ],
+              SizedBox(height: 16),
+              Text(
+                '${widget.score} / ${widget.totalQuestions}',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  color: quizPrimaryColor, // Cor tema
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 24),
-
-            // Botão de Salvar
-            ElevatedButton(
-              onPressed: _isLoading ? null : _submitAndShowRanking,
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16),
+              SizedBox(height: 40),
+              Text(
+                'Entre para o Ranking Semanal!',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-              child: _isLoading
-                  ? SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text(
-                      'Salvar e Ver Ranking',
-                      style: TextStyle(fontSize: 16),
+              SizedBox(height: 16),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _nomeController,
+                      decoration: _inputDecoration(
+                        'Seu Nome*',
+                      ), // Estilo aplicado
+                      validator: (value) => value == null || value.isEmpty
+                          ? 'Campo obrigatório'
+                          : null,
                     ),
-            ),
+                    SizedBox(height: 12),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: _inputDecoration(
+                        'Seu Email*',
+                      ), // Estilo aplicado
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Campo obrigatório';
+                        final emailRegex = RegExp(
+                          r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                        );
+                        if (!emailRegex.hasMatch(value))
+                          return 'Email inválido';
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: _isLoading ? null : _submitAndShowRanking,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: quizPrimaryColor, // Cor tema
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: _isLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        'Salvar e Ver Ranking',
+                        style: TextStyle(fontSize: 16),
+                      ),
+              ),
 
-            SizedBox(height: 12),
+              SizedBox(height: 12),
 
-            // Botão de Voltar ao Menu
-            TextButton(
-              onPressed: () {
-                // Pop 3 vezes para voltar ao Menu Principal
-                // (Pop 1: QuizScoreScreen, Pop 2: QuizScreen, Pop 3: QuizSelectionScreen)
-                int count = 0;
-                Navigator.of(context).popUntil((_) => count++ >= 3);
-              },
-              child: Text('Voltar ao Menu Principal'),
-            ),
-          ],
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+                child: Text(
+                  'Voltar ao Menu Principal',
+                  style: TextStyle(color: quizPrimaryColor),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -23,4 +23,9 @@ class Post extends Model
     {
         return $this->belongsTo(Info_Postador::class, 'postador_id', 'id_postador');
     }
+
+    public function historico()
+    {
+        return $this->morphMany(Hist_Alteracao_Bioma::class, 'loggable');
+    }
 }

@@ -19,7 +19,6 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   final ApiService apiService = ApiService();
   late Future<List<QuizQuestion>> _quizFuture;
-
   List<QuizQuestion> _questions = [];
   int _currentQuestionIndex = 0;
   int _score = 0;
@@ -75,118 +74,153 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Color _getOptionColor(int optionId) {
     if (!_answered) {
-      return Colors.grey[200]!;
+      return Colors.white;
     }
     if (optionId == _questions[_currentQuestionIndex].idRespostaCorreta) {
-      return Colors.green;
+      return Colors.green[400]!;
     } else if (optionId == _selectedOptionId) {
-      return Colors.red;
+      return Colors.red[400]!;
     } else {
       return Colors.grey[200]!;
     }
   }
 
+  Color _getOptionTextColor(int optionId) {
+    if (!_answered) {
+      return Colors.black87;
+    }
+    return Colors.white;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Color quizPrimaryColor = Colors.purple[700]!;
+    final Color quizGradientStart = Colors.purple[300]!.withOpacity(0.5);
+    final Color quizGradientEnd = Colors.white;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Quiz: ${widget.biomaNome}'),
+        backgroundColor: quizPrimaryColor, // Cor tema
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
+          preferredSize: Size.fromHeight(6.0), // Aumenta a espessura
           child: LinearProgressIndicator(
             value: _questions.isEmpty
                 ? 0.0
                 : (_currentQuestionIndex + 1) / _questions.length,
-            backgroundColor: Colors.grey[300],
+            backgroundColor: Colors.purple[100], // Fundo da barra
+            valueColor: AlwaysStoppedAnimation<Color>(
+              Colors.white,
+            ), // Cor da barra
           ),
         ),
       ),
-      body: FutureBuilder<List<QuizQuestion>>(
-        future: _quizFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            print(snapshot.data);
-            return Center(
-              child: Text('Erro ao carregar o quiz: ${snapshot.error}'),
-            );
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Nenhuma pergunta encontrada.'));
-          } else {
-            // Salva as perguntas no estado local
-            _questions = snapshot.data!;
-            final QuizQuestion currentQuestion =
-                _questions[_currentQuestionIndex];
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [quizGradientStart, quizGradientEnd], // Gradiente roxo
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.0, 0.7],
+          ),
+        ),
+        // O FutureBuilder agora é filho do Container com gradiente
+        child: FutureBuilder<List<QuizQuestion>>(
+          future: _quizFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(color: quizPrimaryColor),
+              );
+            } else if (snapshot.hasError) {
+              print(snapshot.data);
+              return Center(
+                child: Text('Erro ao carregar o quiz: ${snapshot.error}'),
+              );
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text('Nenhuma pergunta encontrada.'));
+            } else {
+              _questions = snapshot.data!;
+              final QuizQuestion currentQuestion =
+                  _questions[_currentQuestionIndex];
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Pergunta (ex: "Pergunta 1 de 10")
-                  Text(
-                    'Pergunta ${_currentQuestionIndex + 1} de ${_questions.length}',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleMedium?.copyWith(color: Colors.grey),
-                  ),
-                  SizedBox(height: 16),
-
-                  // Texto da Pergunta
-                  Text(
-                    currentQuestion.perguntaTexto,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Pergunta (ex: "Pergunta 1 de 10")
+                    Text(
+                      'Pergunta ${_currentQuestionIndex + 1} de ${_questions.length}',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Colors.purple[900],
+                      ), // Cor roxa
                     ),
-                  ),
-                  SizedBox(height: 24),
+                    SizedBox(height: 16),
 
-                  // Imagem (se houver)
-                  if (currentQuestion.imagemUrl != null)
-                    Container(
-                      height: 250,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
+                    // Texto da Pergunta
+                    Text(
+                      currentQuestion.perguntaTexto,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 24),
+
+                    // Imagem (se houver)
+                    if (currentQuestion.imagemUrl != null)
+                      ClipRRect(
+                        // Adicionado ClipRRect para bordas arredondadas
                         borderRadius: BorderRadius.circular(12.0),
+                        child: Image.network(
+                          currentQuestion.imagemUrl!,
+                          height: 250,
+                          fit: BoxFit.cover,
+                          errorBuilder: (c, e, s) =>
+                              Center(child: Icon(Icons.broken_image, size: 60)),
+                        ),
                       ),
-                      child: Image.network(
-                        currentQuestion.imagemUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (c, e, s) =>
-                            Center(child: Icon(Icons.broken_image, size: 60)),
-                      ),
-                    ),
-                  SizedBox(height: 24),
+                    SizedBox(height: 24),
 
-                  // Botões de Opção
-                  ...currentQuestion.opcoes.map((option) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: ElevatedButton(
-                        onPressed: () => _handleAnswer(option.id),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _getOptionColor(option.id),
-                          foregroundColor: _answered
-                              ? Colors.white
-                              : Colors.black, // Cor do texto
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          textStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                    // Botões de Opção
+                    ...currentQuestion.opcoes.map((option) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
+                        child: ElevatedButton(
+                          onPressed: () => _handleAnswer(option.id),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _getOptionColor(option.id),
+                            foregroundColor: _getOptionTextColor(option.id),
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              side: BorderSide(
+                                color: _answered
+                                    ? Colors.transparent
+                                    : Colors.grey[400]!,
+                              ),
+                            ),
+                            elevation: 2.0,
+                          ),
+                          child: Text(
+                            option.text,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        child: Text(option.text),
-                      ),
-                    );
-                  }).toList(),
-                ],
-              ),
-            );
-          }
-        },
+                      );
+                    }).toList(),
+                  ],
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }
