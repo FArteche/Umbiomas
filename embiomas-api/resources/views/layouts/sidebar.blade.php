@@ -9,15 +9,6 @@
 
     <nav class="flex-1 py-6 px-4 space-y-2 bg-gray-100">
 
-        @php
-            function isActive($routes)
-            {
-                return in_array(request()->route()->getName(), (array) $routes)
-                    ? 'bg-lime-600 text-gray-50 font-semibold'
-                    : 'text-gray-600 hover:bg-lime-200 hover:text-gray-900';
-            }
-        @endphp
-
         <a href="{{ route('dashboard') }}"
             class="flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors duration-150 {{ isActive(['dashboard']) }}">
             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

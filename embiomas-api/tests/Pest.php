@@ -11,9 +11,14 @@
 |
 */
 
+// Configuração para testes Feature (com RefreshDatabase)
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
+
+// Configuração para testes Unit (sem RefreshDatabase, mais rápidos)
+pest()->extend(Tests\TestCase::class)
+    ->in('Unit');
 
 /*
 |--------------------------------------------------------------------------

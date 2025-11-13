@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\flora;
+use App\Models\Flora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class floraController extends Controller
+class FloraController extends Controller
 {
     /**
      * Display a listing of the resource.
