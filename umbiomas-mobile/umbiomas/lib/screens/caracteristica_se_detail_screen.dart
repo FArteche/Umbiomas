@@ -57,8 +57,7 @@ class _CaracteristicaSeDetailScreenState
                   String? imageUrl = itemData.imagemUrl;
                   String? description = itemData.descricao;
                   String? tipoNome =
-                      itemData.tipo?.nome; // Pega o nome do tipo aninhado
-                  List<String> alsoPresentIn = itemData.tambemPresenteEm ?? [];
+                      itemData.tipo?.nome; 
 
                   return SingleChildScrollView(
                     padding: const EdgeInsets.all(16.0),
@@ -137,47 +136,6 @@ class _CaracteristicaSeDetailScreenState
                             ),
                           ),
                         SizedBox(height: 16),
-
-                        // "Também presente em"
-                        if (alsoPresentIn.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: StyledContentBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Presente nos biomas:",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.green[900],
-                                        ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Wrap(
-                                    spacing: 8.0,
-                                    runSpacing: 4.0,
-                                    children: alsoPresentIn.map<Widget>((
-                                      nomeBioma,
-                                    ) {
-                                      return Chip(
-                                        label: Text(nomeBioma),
-                                        backgroundColor: Colors.white,
-                                        shape: StadiumBorder(
-                                          side: BorderSide(
-                                            color: Colors.green[200]!,
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
 
                         // Descrição
                         StyledContentBox(
